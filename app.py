@@ -163,8 +163,6 @@ def submit_forecast():
     # Render the form again if it's a GET request or if the POST submission fails
     return render_template('index.html', success=success)
 
-
-
 @app.route('/forecasts')
 @login_required
 def forecasts_page():
@@ -241,13 +239,6 @@ def download_csv():
     output.headers["Content-type"] = "text/csv"
     return output
 
-
-
-
-
-
-
-
 @app.route('/data')
 @login_required
 def forecasts_page_admin():
@@ -280,7 +271,6 @@ def forecasts_page_admin():
     
     return render_template('data.html', forecasts=forecasts)
 
-
 @app.route('/download_csv_admin')
 @login_required
 def download_csv_admin():
@@ -308,19 +298,6 @@ def download_csv_admin():
     output.headers["Content-Disposition"] = "attachment; filename=forecasts.csv"
     output.headers["Content-type"] = "text/csv"
     return output
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     init_db()
