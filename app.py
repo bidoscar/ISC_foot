@@ -140,12 +140,9 @@ def submit_forecast():
         third_place = request.form['thirdPlace']
         percentage = request.form['percentage']
 
-        # Debug print statements
-        print(f"Received forecast: {first_place}, {second_place}, {third_place}, {percentage}")
-
         db = get_db()
         cursor = db.cursor()
-
+        
         for _ in range(5):  # Retry up to 5 times
             try:
                 cursor.execute('''
@@ -155,7 +152,7 @@ def submit_forecast():
                 db.commit()
                 print("Forecast successfully saved to the database")
                 success = True  # Set success flag
-                break
+                return redirect(url_for('forecasts_page'))  # Redirect after successful submission
             except sqlite3.OperationalError as e:
                 if 'database is locked' in str(e):
                     print("Database is locked, retrying...")
@@ -163,7 +160,9 @@ def submit_forecast():
                 else:
                     raise
 
+    # Render the form again if it's a GET request or if the POST submission fails
     return render_template('index.html', success=success)
+
 
 
 @app.route('/forecasts')
@@ -173,6 +172,7 @@ def forecasts_page():
     cursor = db.cursor()
     cursor.execute('''
         SELECT 
+            forecasts.id,
             forecasts.first_place, 
             forecasts.second_place, 
             forecasts.third_place, 
@@ -186,14 +186,21 @@ def forecasts_page():
     rows = cursor.fetchall()
     
     forecasts = []
+    latest_id = None
+    
+    if rows:
+        latest_id = max(row['id'] for row in rows if row['username'] == current_user.username)
+
     for row in rows:
         forecast = {
+            'id': row['id'],
             'first_place': row['first_place'],
             'second_place': row['second_place'],
             'third_place': row['third_place'],
             'percentage': row['percentage'],
             'username': row['username'],
-            'email': row['email']
+            'email': row['email'],
+            'is_latest': row['id'] == latest_id
         }
         forecasts.append(forecast)
     
@@ -234,15 +241,86 @@ def download_csv():
     output.headers["Content-type"] = "text/csv"
     return output
 
-@app.route('/check_forecasts')
-def check_forecasts():
+
+
+
+
+
+
+
+@app.route('/data')
+@login_required
+def forecasts_page_admin():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute('SELECT * FROM forecasts')
-    forecasts = cursor.fetchall()
-    for forecast in forecasts:
-        print(forecast)
-    return 'Check console for forecasts data'
+    cursor.execute('''
+        SELECT 
+            forecasts.first_place, 
+            forecasts.second_place, 
+            forecasts.third_place, 
+            forecasts.percentage, 
+            users.username, 
+            users.email 
+        FROM forecasts
+        JOIN users ON forecasts.user_id = users.id
+    ''')
+    rows = cursor.fetchall()
+    
+    forecasts = []
+    for row in rows:
+        forecast = {
+            'first_place': row['first_place'],
+            'second_place': row['second_place'],
+            'third_place': row['third_place'],
+            'percentage': row['percentage'],
+            'username': row['username'],
+            'email': row['email']
+        }
+        forecasts.append(forecast)
+    
+    return render_template('data.html', forecasts=forecasts)
+
+
+@app.route('/download_csv_admin')
+@login_required
+def download_csv_admin():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute('''
+        SELECT 
+            forecasts.first_place, 
+            forecasts.second_place, 
+            forecasts.third_place, 
+            forecasts.percentage, 
+            users.username, 
+            users.email 
+        FROM forecasts
+        JOIN users ON forecasts.user_id = users.id
+    ''')
+    data = cursor.fetchall()
+
+    # Create a CSV file in memory
+    si = StringIO()
+    cw = csv.writer(si)
+    cw.writerow(['First Place', 'Second Place', 'Third Place', 'Percentage', 'Username', 'Email'])
+    cw.writerows(data)
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=forecasts.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     init_db()
