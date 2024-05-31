@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football Forecast Invitation</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
@@ -13,6 +12,10 @@
         <p>We invite you to the football forecast between four teams: UM6P Rabat, UM6P Benguerir, CESAM, and NISAM.</p>
         <p>You are expected to predict the three winning teams in order and the percentage of the other forecasters that would select the same team as you.</p>
         <p>To win the award sponsored by UM6P International Student Office (ISO) and the Youniverse Business Summit, avoid making predictions based on emotions.</p>
+
+        {% if success %}
+            <p class="success">Your submission is successfully received.</p>
+        {% endif %}
         
         <form id="forecastForm" action="/submit" method="post">
             <label for="firstPlace">1st Place:</label>
@@ -48,10 +51,13 @@
             <button type="submit">Submit Forecast</button>
         </form>
         
-
         <div id="result"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('forecastForm').addEventListener('submit', function(event) {
+            // Allow the form to submit normally
+        });
+    </script>
 </body>
 </html>

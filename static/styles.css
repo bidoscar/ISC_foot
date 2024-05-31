@@ -54,3 +54,10 @@ button:hover {
 #result {
     margin-top: 20px;
 }
+
+.success {
+    color: green;
+    font-weight: bold;
+    margin-top: 20px;
+}
+

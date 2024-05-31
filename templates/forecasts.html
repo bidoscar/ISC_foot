@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forecasts</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
@@ -24,12 +24,12 @@
             <tbody>
                 {% for forecast in forecasts %}
                 <tr>
-                    <td>{{ forecast[0] }}</td>
-                    <td>{{ forecast[1] }}</td>
-                    <td>{{ forecast[2] }}</td>
-                    <td>{{ forecast[3] }}%</td>
-                    <td>{{ forecast[4] }}</td>
-                    <td>{{ forecast[5] }}</td>
+                    <td>{{ forecast['first_place'] }}</td>
+                    <td>{{ forecast['second_place'] }}</td>
+                    <td>{{ forecast['third_place'] }}</td>
+                    <td>{{ forecast['percentage'] }}%</td>
+                    <td>{{ forecast['username'] }}</td>
+                    <td>{{ forecast['email'] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
