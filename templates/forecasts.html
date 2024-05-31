@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecasts</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Submitted Forecasts</h1>
+        <a href="{{ url_for('download_csv') }}" class="btn">Download as CSV</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>1st Place</th>
+                    <th>2nd Place</th>
+                    <th>3rd Place</th>
+                    <th>Percentage</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for forecast in forecasts %}
+                <tr>
+                    <td>{{ forecast[0] }}</td>
+                    <td>{{ forecast[1] }}</td>
+                    <td>{{ forecast[2] }}</td>
+                    <td>{{ forecast[3] }}%</td>
+                    <td>{{ forecast[4] }}</td>
+                    <td>{{ forecast[5] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

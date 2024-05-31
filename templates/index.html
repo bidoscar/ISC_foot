@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Forecast Invitation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Football Forecast Invitation</h1>
+        <p>We invite you to the football forecast between four teams: UM6P Rabat, UM6P Benguerir, CESAM, and NISAM.</p>
+        <p>You are expected to predict the three winning teams in order and the percentage of the other forecasters that would select the same team as you.</p>
+        <p>To win the award sponsored by UM6P International Student Office (ISO) and the Youniverse Business Summit, avoid making predictions based on emotions.</p>
+        
+        <form id="forecastForm" action="/submit" method="post">
+            <label for="firstPlace">1st Place:</label>
+            <select id="firstPlace" name="firstPlace" required>
+                <option value="" disabled selected>Select a team</option>
+                <option value="UM6P Rabat">UM6P Rabat</option>
+                <option value="UM6P Benguerir">UM6P Benguerir</option>
+                <option value="CESAM">CESAM</option>
+                <option value="NISAM">NISAM</option>
+            </select>
+        
+            <label for="secondPlace">2nd Place:</label>
+            <select id="secondPlace" name="secondPlace" required>
+                <option value="" disabled selected>Select a team</option>
+                <option value="UM6P Rabat">UM6P Rabat</option>
+                <option value="UM6P Benguerir">UM6P Benguerir</option>
+                <option value="CESAM">CESAM</option>
+                <option value="NISAM">NISAM</option>
+            </select>
+        
+            <label for="thirdPlace">3rd Place:</label>
+            <select id="thirdPlace" name="thirdPlace" required>
+                <option value="" disabled selected>Select a team</option>
+                <option value="UM6P Rabat">UM6P Rabat</option>
+                <option value="UM6P Benguerir">UM6P Benguerir</option>
+                <option value="CESAM">CESAM</option>
+                <option value="NISAM">NISAM</option>
+            </select>
+        
+            <label for="percentage">Percentage of other forecasters selecting the same teams:</label>
+            <input type="number" id="percentage" name="percentage" min="0" max="100" required>
+        
+            <button type="submit">Submit Forecast</button>
+        </form>
+        
+
+        <div id="result"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
